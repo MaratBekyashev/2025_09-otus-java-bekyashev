@@ -1,3 +1,3 @@
-# 2025_09-java-professional
+# 2025_09_30 -java-professional
 
 Студент: Марат Бекяшев
