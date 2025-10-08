@@ -1,10 +1,13 @@
 // Корневой
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+//import name.remal.gradle_plugins.sonarlint.SonarLintExtension
+//import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+//import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 
 plugins {
     java
-//    application
-    id("io.spring.dependency-management")
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -13,8 +16,9 @@ allprojects {
     version = "1.0.0"
 
     repositories {
-        mavenLocal()
+        gradlePluginPortal()  // Обязательно добавьте это!
         mavenCentral()
+        google()
     }
 
     //val testcontainersBom: String by project
@@ -30,11 +34,11 @@ allprojects {
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
         dependencies {
-            imports {
+            /*imports {
                 mavenBom(BOM_COORDINATES)
                 //mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
                 //   mavenBom("com.google.protobuf:protobuf-bom:$protobufBom")
-            }
+            }*/
             dependency("com.google.guava:guava:$guava")
             //dependency("org.openjdk.jmh:jmh-core:$jmh")
             //dependency("org.openjdk.jmh:jmh-generator-annprocess:$jmh")
@@ -46,7 +50,7 @@ allprojects {
         }
     }
 
-    configurations.all {
+    /*configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
 
@@ -57,19 +61,6 @@ allprojects {
             //force("org.codehaus.jackson:jackson-mapper-asl:1.8.8")
             force("commons-io:commons-io:2.18.0")
         }
-    }
-    // Явно указываем совместимость Java
-    java {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
+    }*/
 
-}
-
-subprojects {
-    plugins.apply(JavaPlugin::class.java)
-    extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
-    }
 }
