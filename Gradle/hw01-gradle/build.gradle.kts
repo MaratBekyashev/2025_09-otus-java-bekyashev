@@ -1,8 +1,7 @@
-plugins {
-     java
-    // application
-    id("com.github.johnrengelman.shadow")
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+plugins {
+    id ("com.github.johnrengelman.shadow")
 }
 
 dependencies {
@@ -10,12 +9,12 @@ dependencies {
 }
 
 tasks {
-    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    named<ShadowJar>("shadowJar") {
         archiveBaseName.set("gradleHelloWorld")
         archiveVersion.set("0.1")
         archiveClassifier.set("")
         manifest {
-            attributes(mapOf("Main-Class" to "ru.otus.MainClass"))
+            attributes(mapOf("Main-Class" to "ru.otus.HelloOtus"))
         }
     }
 
@@ -23,4 +22,3 @@ tasks {
         dependsOn(shadowJar)
     }
 }
-
