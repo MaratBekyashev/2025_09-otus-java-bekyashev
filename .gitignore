@@ -36,4 +36,4 @@ out
 *.iws
 *.ipr
 *.idea
-
+**/gradle/
