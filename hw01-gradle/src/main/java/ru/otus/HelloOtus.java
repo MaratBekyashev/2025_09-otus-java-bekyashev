@@ -2,6 +2,7 @@ package ru.otus;
 
 import com.google.common.collect.ImmutableList;
 
+@SuppressWarnings({"java:S106", "java:S4738"})
 public class HelloOtus {
 
     public static void main(String[] args) {
