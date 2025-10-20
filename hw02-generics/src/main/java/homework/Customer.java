@@ -26,7 +26,7 @@ public class Customer {
 
         Customer otherCustomer = (Customer) o;
 
-        return Objects.equals(this.id, otherCustomer.id);
+        return Objects.equals(this.id, otherCustomer.getId());
     }
 
     @Override
