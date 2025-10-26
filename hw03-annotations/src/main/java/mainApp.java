@@ -5,6 +5,6 @@ public class mainApp {
 
     public static void main(String[] args) {
 
-        TestRunner.runTests(TestContainer.class);
+        TestRunner.executeTests(TestContainer.class);
     }
 }
