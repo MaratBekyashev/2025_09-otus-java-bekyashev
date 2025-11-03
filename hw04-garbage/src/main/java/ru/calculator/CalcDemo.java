@@ -21,8 +21,6 @@ package ru.calculator;
  - Integer заменен на int
 В классе Summator:
  - SecureRandom.nextInt заменен на ThreadLocalRandom.current().nextInt(); - именно это дает основной прирост производительности
- - При очистке массива дополнительно физическая очистка списка выполняется ((ArrayList) listValues).trimToSize();
-  (Хотя это замедляет программу)
  - Тип локальных переменных класса изменен с Integer на int
 */
 

@@ -32,7 +32,6 @@ public class Summator {
         listValues.add(data);
         if (listValues.size() % 100_000 == 0) {
             listValues.clear();
-            ((ArrayList) listValues).trimToSize();
         }
 
         sum += data.getValue() + ThreadLocalRandom.current().nextInt();
