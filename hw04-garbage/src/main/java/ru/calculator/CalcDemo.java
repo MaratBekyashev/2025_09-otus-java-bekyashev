@@ -10,11 +10,16 @@ package ru.calculator;
 */
 
 /* run performance statistics:
--Xms128m -Xmx128m   Before: spend sec:211/213/202 || After: 6/6/7
--Xms256m -Xmx256m   Before: spend sec:199/193/202 || After: 5/5/5
--Xms784m -Xmx784m   Before: spend sec:187/188/188 || After: 5/5/5
--Xms1024m -Xmx1024m Before: spend sec:192/200/204 || After: 5/5/5
--Xms2028m -Xmx2048m Before: spend sec:205/194/199 || After: 5/5/5
+-Xms8m -Xmx8m       Before:  231  || After: 9
+-Xms16m -Xmx16m     Before:  192  || After: 6
+-Xms32m -Xmx32m     Before:  181  || After: 5
+-Xms64m -Xmx64m     Before:  174  || After: 5
+-Xms128m -Xmx128m   Before:  174  || After: 5
+-Xms256m -Xmx256m   Before:  182  || After: 5
+-Xms512m -Xmx512m   Before:  173  || After: 5
+-Xms784m -Xmx784m   Before:  172  || After: 5
+-Xms1024m -Xmx1024m Before:  172  || After: 5
+-Xms2028m -Xmx2048m Before:  173  || After: 5
 
 Выполненные доработки:
 В классе Data :
