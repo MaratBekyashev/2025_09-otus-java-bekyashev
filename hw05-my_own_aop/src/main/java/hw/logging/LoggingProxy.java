@@ -13,7 +13,9 @@ public class LoggingProxy implements InvocationHandler {
 
     private final Object target;
 
-    private final Map<MethodReflectionKey, Method> methodsMap = new ConcurrentHashMap<>();
+    private final Map<Method, Method> methodsMap = new ConcurrentHashMap<>();
+
+    private final Map<Method, Boolean> logMethodsMap = new ConcurrentHashMap<>();
 
     public static Object createProxy(Object target) {
         return Proxy.newProxyInstance(
@@ -22,19 +24,27 @@ public class LoggingProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // Получаем метод из класса (а не из интерфейса)
+
         Method realMethod;
-        var key = new MethodReflectionKey(method.getName(), args);
-        if (methodsMap.containsKey(key)) {
-            realMethod = methodsMap.get(key);
+        if (methodsMap.containsKey(method)) {
+            realMethod = methodsMap.get(method);
             System.out.println("Method " + method.getName() + " description is obtained from cache");
         } else {
+            // Получаем метод из класса (а не из интерфейса)
             realMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
-            methodsMap.put(key, realMethod);
+            methodsMap.put(method, realMethod);
             System.out.println("Method " + method.getName() + " description has been putted to cache");
         }
 
-        if (realMethod.isAnnotationPresent(Log.class)) {
+        boolean isLogAnnotated;
+        if (logMethodsMap.containsKey(realMethod)) {
+            isLogAnnotated = true;
+        } else {
+            isLogAnnotated = realMethod.isAnnotationPresent(Log.class);
+            logMethodsMap.put(realMethod, isLogAnnotated);
+        }
+
+        if (isLogAnnotated) {
             StringBuilder sb = new StringBuilder();
             sb.append("--> PROXY <-- executed method: ").append(method.getName());
             sb.append("executed method: ").append(method.getName());
