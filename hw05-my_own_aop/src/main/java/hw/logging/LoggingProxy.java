@@ -13,8 +13,6 @@ public class LoggingProxy implements InvocationHandler {
 
     private final Object target;
 
-    private final Map<Method, Method> methodsMap = new ConcurrentHashMap<>();
-
     private final Map<Method, Boolean> logMethodsMap = new ConcurrentHashMap<>();
 
     public static Object createProxy(Object target) {
@@ -25,29 +23,21 @@ public class LoggingProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-        Method realMethod;
-        if (methodsMap.containsKey(method)) {
-            realMethod = methodsMap.get(method);
-            System.out.println("Method " + method.getName() + " description is obtained from cache");
-        } else {
-            // Получаем метод из класса (а не из интерфейса)
-            realMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
-            methodsMap.put(method, realMethod);
-            System.out.println("Method " + method.getName() + " description has been putted to cache");
-        }
-
         boolean isLogAnnotated;
-        if (logMethodsMap.containsKey(realMethod)) {
-            isLogAnnotated = true;
+
+        if (logMethodsMap.containsKey(method)) {
+            isLogAnnotated = logMethodsMap.get(method);
+            System.out.println("Method \"" + method.getName() + "\" description is obtained from cache");
         } else {
+            Method realMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
             isLogAnnotated = realMethod.isAnnotationPresent(Log.class);
-            logMethodsMap.put(realMethod, isLogAnnotated);
+            logMethodsMap.put(method, isLogAnnotated);
+            System.out.println("Method \"" + method.getName() + "\" description has been putted to cache");
         }
 
         if (isLogAnnotated) {
             StringBuilder sb = new StringBuilder();
-            sb.append("--> PROXY <-- executed method: ").append(method.getName());
-            sb.append("executed method: ").append(method.getName());
+            sb.append("--> PROXY <-- method params: ").append(method.getName());
             if (args != null && args.length > 0) {
                 sb.append(", param: ");
                 for (int i = 0; i < args.length; i++) {
@@ -57,7 +47,7 @@ public class LoggingProxy implements InvocationHandler {
             }
             System.out.println(sb);
         }
-
+        System.out.println("--> PROXY <-- Invoke of original method for: " + method.getName());
         return method.invoke(target, args);
     }
 }

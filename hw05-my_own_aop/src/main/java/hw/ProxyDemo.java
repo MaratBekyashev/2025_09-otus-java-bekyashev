@@ -10,11 +10,10 @@ public class ProxyDemo {
         TestLoggingInterface test = (TestLoggingInterface) LoggingProxy.createProxy(new TestLoggingInterfaceImpl());
 
         for (var i = 0; i < 3; i++) {
+            System.out.println("******");
             test.calculation(6 * i);
-
             test.calculation(45, 5 * i);
-
-            test.calculation(1, 3, "qwerty");
+            test.methodWithoutLogging(55);
         }
     }
 }
