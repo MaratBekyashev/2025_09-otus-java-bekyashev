@@ -1,8 +1,8 @@
 package hw;
 
-import hw.logging.LoggingProxy;
-import hw.logging.TestLoggingInterface;
-import hw.logging.TestLoggingInterfaceImpl;
+import hw.model.LoggingProxy;
+import hw.model.TestLoggingInterface;
+import hw.model.TestLoggingInterfaceImpl;
 
 public class ProxyDemo {
 

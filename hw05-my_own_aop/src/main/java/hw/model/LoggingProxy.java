@@ -1,4 +1,4 @@
-package hw.logging;
+package hw.model;
 
 import hw.annotations.Log;
 import java.lang.reflect.InvocationHandler;

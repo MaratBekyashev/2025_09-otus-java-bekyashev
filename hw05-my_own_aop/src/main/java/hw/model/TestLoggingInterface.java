@@ -1,4 +1,4 @@
-package hw.logging;
+package hw.model;
 
 public interface TestLoggingInterface {
 

@@ -4,8 +4,8 @@ include("hw01-gradle")
 include("hw02-generics")
 include("hw03-annotations")
 include("hw04-garbage")
-
 include("hw05-my_own_aop")
+include("hw06-atm-emulator")
 
 pluginManagement {
     val jgitver: String by settings
