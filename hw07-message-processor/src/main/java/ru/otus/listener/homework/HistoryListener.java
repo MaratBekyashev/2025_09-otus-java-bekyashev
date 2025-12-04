@@ -28,6 +28,10 @@ public class HistoryListener implements Listener, HistoryReader {
     @Override
     public Optional<Message> findMessageById(long id) {
         Deque<Message> history = messageHistory.get(id);
+
+        if (history == null || history.isEmpty()) {
+            return Optional.empty();
+        }
         return Optional.of(history.pop());
     }
 }
