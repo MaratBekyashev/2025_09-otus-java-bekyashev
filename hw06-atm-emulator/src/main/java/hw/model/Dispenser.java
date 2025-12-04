@@ -27,7 +27,7 @@ public class Dispenser {
         }
 
         if (remaining > 0) {
-            throw new IllegalArgumentException("Its unable to dithDraw needed amount:   " + sum);
+            throw new IllegalArgumentException("Its unable to withDraw needed amount:   " + sum);
         }
 
         // вынуть деньги из ячеек в соответствии с планом выдачи

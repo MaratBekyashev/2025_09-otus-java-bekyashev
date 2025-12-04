@@ -2,32 +2,12 @@ package hw.model;
 
 import java.util.Map;
 
-public class Atm {
+public interface Atm {
 
-    private final AtmStorage storage;
+    void deposit(Banknote banknote, int count);
 
-    private final Dispenser dispenser;
+    Map<Banknote, Integer> withdraw(int amount);
 
-    public static Atm createEmptyAtm() {
-        return new Atm();
-    }
+    int getBalance();
 
-    private Atm() {
-        this.storage = new AtmStorage();
-        this.dispenser = new Dispenser();
-    }
-
-    public void deposit(Banknote banknote, int count) {
-        if (count > 0) {
-            storage.getCell(banknote).depositMoney(count);
-        }
-    }
-
-    public Map<Banknote, Integer> withdraw(int amount) {
-        return dispenser.withdrawMoney(storage, amount);
-    }
-
-    public int getBalance() {
-        return storage.getBalance();
-    }
 }

@@ -1,5 +1,6 @@
 package hw;
 
+import hw.model.AtmFactory;
 import hw.model.Atm;
 import hw.model.Banknote;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 public class Application {
 
     public static void main(String[] args) {
-        Atm atm = Atm.createEmptyAtm();
+        Atm atm = AtmFactory.createAtm();
 
         Scanner scan = new Scanner(System.in);
         int banknoteCount;
