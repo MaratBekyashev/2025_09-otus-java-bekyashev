@@ -7,6 +7,8 @@ include("hw04-garbage")
 include("hw05-my_own_aop")
 include("hw06-atm-emulator")
 
+include("hw08-json-processor")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
