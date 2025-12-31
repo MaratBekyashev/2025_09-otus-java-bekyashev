@@ -8,6 +8,7 @@ include("hw05-my_own_aop")
 include("hw06-atm-emulator")
 include("hw07-message-processor")
 include("hw08-json-processor")
+include("hw09-orm")
 
 pluginManagement {
     val jgitver: String by settings
