@@ -3,9 +3,9 @@ package ru.otus.jdbc.mapper;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.otus.core.repository.DataTemplate;
 import ru.otus.core.repository.DataTemplateException;
@@ -13,7 +13,6 @@ import ru.otus.core.repository.executor.DbExecutor;
 
 /** Сохраняет объект в базу, читает объект из базы */
 @SuppressWarnings("java:S1068")
-@RequiredArgsConstructor
 @Slf4j
 public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
@@ -24,6 +23,14 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     private final EntitySQLMetaData entitySQLMetaData;
 
     private final Map<String, Function<ResultSet, ?>> sqlMappers;
+
+    public DataTemplateJdbc(DbExecutor dbExecutor, EntityClassMetaData<T> metaData, EntitySQLMetaData sqlMetaData) {
+        this.dbExecutor = dbExecutor;
+        this.entityMetaData = metaData;
+        this.entitySQLMetaData = sqlMetaData;
+
+        this.sqlMappers = initHandlers();
+    }
 
     @Override
     public Optional<T> findById(Connection connection, long id) {
@@ -82,6 +89,51 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             log.info("Generated SQL text for UPDATE: {}", entitySQLMetaData.getUpdateSql());
             log.info("Params for UPDATE = {}", params);
             dbExecutor.executeStatement(connection, entitySQLMetaData.getUpdateSql(), params);
+        } catch (Exception e) {
+            throw new DataTemplateException(e);
+        }
+    }
+
+    private Map<String, Function<ResultSet, ?>> initHandlers() {
+        return Map.of(
+                "findById", this::mapSingleEntity,
+                "findAll", this::mapEntityList);
+    }
+
+    private T mapSingleEntity(ResultSet rs) {
+        try {
+            if (rs.next()) {
+                return mapRow(rs);
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DataTemplateException(e);
+        }
+    }
+
+    private List<T> mapEntityList(ResultSet rs) {
+        try {
+            List<T> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(mapRow(rs));
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new DataTemplateException(e);
+        }
+    }
+
+    private T mapRow(ResultSet rs) {
+        try {
+            T entity = entityMetaData.getConstructor().newInstance();
+
+            for (Field field : entityMetaData.getAllFields()) {
+                field.setAccessible(true);
+                Object value = rs.getObject(field.getName());
+                field.set(entity, value);
+            }
+
+            return entity;
         } catch (Exception e) {
             throw new DataTemplateException(e);
         }

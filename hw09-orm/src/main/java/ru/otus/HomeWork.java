@@ -1,17 +1,8 @@
 package ru.otus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
-import ru.otus.core.repository.DataTemplateException;
 import ru.otus.core.repository.executor.DbExecutorImpl;
 import ru.otus.core.sessionmanager.TransactionRunnerJdbc;
 import ru.otus.crm.datasource.DriverManagerDataSource;
@@ -32,18 +23,6 @@ public class HomeWork {
         // Общая часть
         var dataSource = new DriverManagerDataSource(URL, USER, PASSWORD);
 
-        try (Connection connection = dataSource.getConnection()) {
-
-            try (PreparedStatement pst = connection.prepareStatement("select 1");
-                    ResultSet rs = pst.executeQuery()) {
-
-                if (rs.next()) {
-                    System.out.println("DB OK: " + rs.getInt(1));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         flywayMigrations(dataSource);
         var transactionRunner = new TransactionRunnerJdbc(dataSource);
         var dbExecutor = new DbExecutorImpl();
@@ -51,33 +30,8 @@ public class HomeWork {
         // Работа с клиентом
         EntityClassMetaData<Client> entityClassMetaDataClient = new EntityClassMetaDataImpl(Client.class);
         EntitySQLMetaData entitySQLMetaDataClient = new EntitySQLMetaDataImpl(entityClassMetaDataClient);
-        Map<String, Function<ResultSet, ?>> clientHandlersMap = Map.of(
-                "findById",
-                        rs -> {
-                            try {
-                                if (rs.next()) {
-                                    return new Client(rs.getLong("id"), rs.getString("name"));
-                                }
-                                return null;
-                            } catch (SQLException e) {
-                                throw new DataTemplateException(e);
-                            }
-                        },
-                "findAll",
-                        rs -> {
-                            try {
-                                List<Client> result = new ArrayList<>();
-                                while (rs.next()) {
-                                    result.add(new Client(rs.getLong("id"), rs.getString("name")));
-                                }
-                                return result;
-                            } catch (SQLException e) {
-                                throw new DataTemplateException(e);
-                            }
-                        });
 
-        var dataTemplateClient = new DataTemplateJdbc<Client>(
-                dbExecutor, entityClassMetaDataClient, entitySQLMetaDataClient, clientHandlersMap);
+        var dataTemplateClient = new DataTemplateJdbc<>(dbExecutor, entityClassMetaDataClient, entitySQLMetaDataClient);
 
         // Код дальше должен остаться
         var dbServiceClient = new DbServiceClientImpl(transactionRunner, dataTemplateClient);
@@ -93,34 +47,8 @@ public class HomeWork {
 
         EntityClassMetaData<Manager> entityClassMetaDataManager = new EntityClassMetaDataImpl(Manager.class);
         EntitySQLMetaData entitySQLMetaDataManager = new EntitySQLMetaDataImpl(entityClassMetaDataManager);
-        Map<String, Function<ResultSet, ?>> managerHandlersMap = Map.of(
-                "findById",
-                        rs -> {
-                            try {
-                                if (rs.next()) {
-                                    return new Manager(rs.getLong("no"), rs.getString("label"), rs.getString("param1"));
-                                }
-                                return null;
-                            } catch (SQLException e) {
-                                throw new DataTemplateException(e);
-                            }
-                        },
-                "findAll",
-                        rs -> {
-                            try {
-                                List<Manager> result = new ArrayList<>();
-                                while (rs.next()) {
-                                    result.add(new Manager(
-                                            rs.getLong("no"), rs.getString("label"), rs.getString("param1")));
-                                }
-                                return result;
-                            } catch (SQLException e) {
-                                throw new DataTemplateException(e);
-                            }
-                        });
-
-        var dataTemplateManager = new DataTemplateJdbc<Manager>(
-                dbExecutor, entityClassMetaDataManager, entitySQLMetaDataManager, managerHandlersMap);
+        var dataTemplateManager =
+                new DataTemplateJdbc<>(dbExecutor, entityClassMetaDataManager, entitySQLMetaDataManager);
 
         var dbServiceManager = new DbServiceManagerImpl(transactionRunner, dataTemplateManager);
         dbServiceManager.saveManager(new Manager("ManagerFirst"));
