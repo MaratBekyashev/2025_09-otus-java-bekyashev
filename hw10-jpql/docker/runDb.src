@@ -1,0 +1,6 @@
+docker run --rm --name pg-docker \
+-e POSTGRES_PASSWORD=otus \
+-e POSTGRES_USER=otus \
+-e POSTGRES_DB=otus \
+-p 5430:5432 \
+postgres:15

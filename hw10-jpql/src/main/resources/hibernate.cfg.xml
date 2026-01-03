@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/otus</property>
+
+    <property name="hibernate.connection.username">otus</property>
+    <property name="hibernate.connection.password">otus</property>
+
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.generate_statistics">true</property>
+
+    <property name="hibernate.hbm2ddl.auto">validate</property>
+    <property name="hibernate.enable_lazy_load_no_trans">false</property>
+
+    <mapping class="ru.otus.crm.model.Client"/>
+    <mapping class="ru.otus.crm.model.Address"/>
+    <mapping class="ru.otus.crm.model.Phone"/>
+
+  </session-factory>
+</hibernate-configuration>

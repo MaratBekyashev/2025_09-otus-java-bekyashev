@@ -9,6 +9,8 @@ include("hw06-atm-emulator")
 include("hw07-message-processor")
 include("hw08-json-processor")
 
+include("hw10-jpql")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings

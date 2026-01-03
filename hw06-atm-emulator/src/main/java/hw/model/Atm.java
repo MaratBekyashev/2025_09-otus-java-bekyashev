@@ -9,5 +9,4 @@ public interface Atm {
     Map<Banknote, Integer> withdraw(int amount);
 
     int getBalance();
-
 }
