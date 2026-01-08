@@ -10,6 +10,9 @@ include("hw07-message-processor")
 include("hw08-json-processor")
 include("hw09-orm")
 
+
+include("hw11-my-cache")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
