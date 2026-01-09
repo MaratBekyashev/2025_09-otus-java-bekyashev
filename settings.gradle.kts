@@ -13,6 +13,8 @@ include("hw09-orm")
 
 include("hw11-my-cache")
 
+include("hw10-jpql")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings

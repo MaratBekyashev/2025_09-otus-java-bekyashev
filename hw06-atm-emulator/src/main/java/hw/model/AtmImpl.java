@@ -1,8 +1,7 @@
 package hw.model;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AtmImpl implements Atm {

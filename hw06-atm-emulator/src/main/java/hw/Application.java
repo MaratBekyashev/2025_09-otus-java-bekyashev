@@ -1,7 +1,7 @@
 package hw;
 
-import hw.model.AtmFactory;
 import hw.model.Atm;
+import hw.model.AtmFactory;
 import hw.model.Banknote;
 import java.util.Map;
 import java.util.Scanner;
