@@ -45,14 +45,10 @@ public class Client implements Cloneable {
     public Client(Long id, String name, Address address, List<Phone> phones) {
         this(id, name);
         this.address = address;
-        this.phones = phones;
         if (phones != null) {
-            phones.forEach(p -> p.setClient(this));
+            this.phones = new ArrayList<>(phones);
+            this.phones.forEach(p -> p.setClient(this));
         }
-
-        //        if (address != null) {
-        //    address.setClient(this);
-        // }
     }
 
     @Override
