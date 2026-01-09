@@ -9,11 +9,9 @@ include("hw06-atm-emulator")
 include("hw07-message-processor")
 include("hw08-json-processor")
 include("hw09-orm")
-
-
+include("hw10-jpql")
 include("hw11-my-cache")
 
-include("hw10-jpql")
 
 pluginManagement {
     val jgitver: String by settings
