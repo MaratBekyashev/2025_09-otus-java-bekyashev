@@ -1,34 +1,31 @@
 package ru.otus.servlet;
 
-import com.google.gson.Gson;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import ru.otus.dao.UserDao;
-import ru.otus.model.User;
+import lombok.RequiredArgsConstructor;
+import ru.otus.model.Client;
+import ru.otus.services.DBServiceClient;
 
 @SuppressWarnings({"java:S1989"})
+@RequiredArgsConstructor
 public class ClientApiServlet extends HttpServlet {
 
     private static final int ID_PATH_PARAM_POSITION = 1;
 
-    private final transient UserDao userDao;
-    private final transient Gson gson;
-
-    public ClientApiServlet(UserDao userDao, Gson gson) {
-        this.userDao = userDao;
-        this.gson = gson;
-    }
+    private final transient DBServiceClient clientService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user = userDao.findById(extractIdFromRequest(request)).orElse(null);
+
+        Long id = extractIdFromRequest(request);
+        Client client = clientService.getClient(id).orElseThrow();
 
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream out = response.getOutputStream();
-        out.print(gson.toJson(user));
+        out.print(client.toString());
     }
 
     private long extractIdFromRequest(HttpServletRequest request) {

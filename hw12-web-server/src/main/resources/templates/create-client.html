@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Client</title>
+</head>
+<body>
+
+<h2>Create New Client</h2>
+
+<form action="/admin" method="post">
+    Name:    <input type="text" name="clientName" required /><br/><br/>
+
+    Address: <input type="text" name="street" /><br/>
+
+    Phones:<br/>
+    <input type="text" name="phones" placeholder="Phone 1" /><br/>
+    <input type="text" name="phones" placeholder="Phone 2" /><br/>
+    <input type="text" name="phones" placeholder="Phone 3" /><br/><br/>
+
+    <button type="submit">Save Client</button>
+</form>
+
+<br/>
+<a href="/clients">CLients</a>
+<a href="/login">Login page</a>
+
+</body>
+</html>

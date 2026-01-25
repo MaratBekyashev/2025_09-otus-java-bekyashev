@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clients</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Clients list</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phones</th>
+    </tr>
+
+    <#list clientList as client>
+    <tr>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>
+            <#if client.address??>
+                ${client.address.street!"N/A"}
+            <#else>
+                N/A
+            </#if>
+        </td>
+        <td>
+            <#if client.phones?has_content>
+               <#list client.phones as phone>
+                   ${phone.phoneNumber}<#if phone?has_next>,
+           </#if>
+           </#list>
+           <#else>
+              N/A
+           </#if>
+        </td>
+    </tr>
+    </#list>
+</table>
+
+<br/>
+
+<a href="/admin">create new client</a>
+
+</body>
+</html>

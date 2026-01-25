@@ -1,29 +1,26 @@
 package ru.otus.server;
 
-import com.google.gson.Gson;
+import org.eclipse.jetty.ee10.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import ru.otus.dao.UserDao;
 import ru.otus.helpers.FileSystemHelper;
+import ru.otus.services.DBServiceClient;
 import ru.otus.services.TemplateProcessor;
-import ru.otus.servlet.UsersApiServlet;
-import ru.otus.servlet.UsersServlet;
+import ru.otus.servlet.*;
 
 public class UsersWebServerSimple implements UsersWebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
-    private final UserDao userDao;
-    private final Gson gson;
+    private final DBServiceClient clientService;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public UsersWebServerSimple(int port, UserDao userDao, Gson gson, TemplateProcessor templateProcessor) {
-        this.userDao = userDao;
-        this.gson = gson;
+    public UsersWebServerSimple(int port, DBServiceClient clientService, TemplateProcessor templateProcessor) {
+        this.clientService = clientService;
         this.templateProcessor = templateProcessor;
         server = new Server(port);
     }
@@ -50,10 +47,16 @@ public class UsersWebServerSimple implements UsersWebServer {
 
         ResourceHandler resourceHandler = createResourceHandler();
         ServletContextHandler servletContextHandler = createServletContextHandler();
+        servletContextHandler.setErrorHandler(new ErrorPageErrorHandler() {
+            {
+                addErrorPage(401, "/error401");
+                addErrorPage(403, "/error403");
+            }
+        });
 
         Handler.Sequence sequence = new Handler.Sequence();
         sequence.addHandler(resourceHandler);
-        sequence.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*"));
+        sequence.addHandler(applySecurity(servletContextHandler, "/admin", "/clients", "/client/*"));
 
         server.setHandler(sequence);
     }
@@ -74,9 +77,15 @@ public class UsersWebServerSimple implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/clients/*");
+
+        servletContextHandler.addServlet(new ServletHolder(new Error401Servlet(templateProcessor)), "/error401");
+        servletContextHandler.addServlet(new ServletHolder(new Error403Servlet(templateProcessor)), "/error403");
+        servletContextHandler.addServlet(
+                new ServletHolder(new AdminServlet(templateProcessor, clientService)), "/admin");
+        servletContextHandler.addServlet(
+                new ServletHolder(new ClientServlet(templateProcessor, clientService)), "/clients");
+        servletContextHandler.addServlet(new ServletHolder(new ClientApiServlet(clientService)), "/client/*");
+
         return servletContextHandler;
     }
 }

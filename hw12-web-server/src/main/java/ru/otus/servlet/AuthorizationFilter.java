@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import ru.otus.model.User;
 
 public class AuthorizationFilter implements Filter {
 
@@ -33,10 +34,25 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession(false);
 
         if (session == null) {
-            response.sendRedirect("/login");
-        } else {
-            filterChain.doFilter(servletRequest, servletResponse);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        if (uri.startsWith("/admin")) {
+            if (!"admin".equals(user.getLogin())) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+        }
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

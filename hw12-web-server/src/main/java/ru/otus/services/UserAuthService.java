@@ -1,5 +1,8 @@
 package ru.otus.services;
 
+import java.util.Optional;
+import ru.otus.model.User;
+
 public interface UserAuthService {
-    boolean authenticate(String login, String password);
+    Optional<User> authenticate(String login, String password);
 }

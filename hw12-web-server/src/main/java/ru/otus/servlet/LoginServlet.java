@@ -9,10 +9,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import ru.otus.model.User;
 import ru.otus.services.TemplateProcessor;
 import ru.otus.services.UserAuthService;
 
 @SuppressWarnings({"java:S1989"})
+@RequiredArgsConstructor
 public class LoginServlet extends HttpServlet {
 
     private static final String PARAM_LOGIN = "login";
@@ -22,11 +26,6 @@ public class LoginServlet extends HttpServlet {
 
     private final transient TemplateProcessor templateProcessor;
     private final transient UserAuthService userAuthService;
-
-    public LoginServlet(TemplateProcessor templateProcessor, UserAuthService userAuthService) {
-        this.userAuthService = userAuthService;
-        this.templateProcessor = templateProcessor;
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,11 +39,14 @@ public class LoginServlet extends HttpServlet {
 
         String name = request.getParameter(PARAM_LOGIN);
         String password = request.getParameter(PARAM_PASSWORD);
+        Optional<User> user = userAuthService.authenticate(name, password);
 
-        if (userAuthService.authenticate(name, password)) {
+        if (user.isPresent()) {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL);
-            response.sendRedirect("/users");
+            session.setAttribute("user", user.get());
+
+            response.sendRedirect("/clients");
         } else {
             response.setStatus(SC_UNAUTHORIZED);
         }
