@@ -46,13 +46,18 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private void processConfig(Class<?> configClass) {
-        checkConfigClass(configClass);
-        List<Method> allConfigMethods = Arrays.asList(configClass.getDeclaredMethods()).stream()
+    private List<Method> getClassMethods(Class<?> configClass) {
+        List<Method> result = Arrays.asList(configClass.getDeclaredMethods()).stream()
                 .filter(i -> i.isAnnotationPresent(AppComponent.class))
                 .sorted(Comparator.comparingInt(
                         m -> m.getAnnotation(AppComponent.class).order()))
                 .collect(Collectors.toList());
+        return result;
+    }
+
+    private void processConfig(Class<?> configClass) {
+        checkConfigClass(configClass);
+        List<Method> allConfigMethods = getClassMethods(configClass);
 
         Object configInstance = null;
         try {
@@ -75,10 +80,8 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
             Object component = null;
             try {
                 component = method.invoke(configInstance, args);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                throw new RuntimeException(ex);
             }
 
             String name = method.getAnnotation(AppComponent.class).name();
