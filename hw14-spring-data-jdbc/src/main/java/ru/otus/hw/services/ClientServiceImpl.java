@@ -31,7 +31,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional(readOnly = true)
     public List<ClientDto> findAll() {
-        List<ClientWithPhonesRow> dataList = clientRepository.customFindAll();
+        List<ClientWithPhonesRow> dataList = clientRepository.getAllClientsWithPhones();
 
         Map<Long, ClientDto> map = new LinkedHashMap<>();
         for (ClientWithPhonesRow row : dataList) {

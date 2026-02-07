@@ -15,7 +15,7 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
         FROM CLIENTS c
         LEFT JOIN PHONES p ON p.client_id = c.client_id
     """)
-    List<ClientWithPhonesRow> customFindAll();
+    List<ClientWithPhonesRow> getAllClientsWithPhones();
 
     Optional<Client> findById(long id);
 }
