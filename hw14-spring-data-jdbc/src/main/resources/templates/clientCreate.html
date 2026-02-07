@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание клиента</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 6px;
+            margin-top: 4px;
+        }
+
+        .phones input {
+            margin-bottom: 6px;
+        }
+
+        button {
+            margin-top: 16px;
+            padding: 8px 16px;
+        }
+
+        .actions {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Создание клиента</h1>
+
+<form th:action="@{/clients/create}" th:object="${client}" method="post">
+
+    <!-- clientName -->
+    <label>
+        Имя клиента
+        <input type="text" th:field="*{clientName}" required />
+    </label>
+
+    <!-- phones -->
+    <label>Телефоны</label>
+
+    <div class="phones">
+        <input type="text"
+               name="phones[0]"
+               placeholder="+7 900 000 00 00"/>
+
+        <input type="text"
+               name="phones[1]"
+               placeholder="+7 900 000 00 01"/>
+
+        <input type="text"
+               name="phones[2]"
+               placeholder="+7 900 000 00 02"/>
+    </div>
+
+    <div class="actions">
+        <button type="submit">Сохранить</button>
+        <a href="/clients">Отмена</a>
+    </div>
+
+</form>
+
+</body>
+</html>

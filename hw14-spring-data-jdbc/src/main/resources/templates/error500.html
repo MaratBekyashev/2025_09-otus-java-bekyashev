@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка</title>
+</head>
+<body>
+
+<h1>Ошибка сервера</h1>
+
+<p>Произошла внутренняя ошибка приложения</p>
+
+<p th:if="${message}">
+    <strong>Сообщение:</strong>
+    <span th:text="${message}"></span>
+</p>
+
+<a href="/">На главную</a>
+
+</body>
+</html>
