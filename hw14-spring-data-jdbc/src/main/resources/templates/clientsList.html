@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список клиентов</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .client-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            max-width: 500px;
+        }
+
+        .client-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .empty {
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<a th:href="@{/}" href="homePage.html">Home</a>
+<h1>Клиенты</h1>
+
+<div th:if="${#lists.isEmpty(clients)}" class="empty">
+    Клиенты отсутствуют
+</div>
+
+<div th:each="client : ${clients}" class="client-card">
+
+    <div class="client-name"
+         th:text="${client.clientName}">
+        Имя клиента
+    </div>
+
+    <div>
+        <strong>ID:</strong>
+        <span th:text="${client.clientId}">1</span>
+    </div>
+
+    <div>
+        <strong>Телефоны:</strong>
+
+        <ul>
+            <li th:each="phone : ${client.phones}"
+                th:text="${phone}">
+                +7 900 000 00 00
+            </li>
+        </ul>
+
+        <div th:if="${#lists.isEmpty(client.phones)}"
+             class="empty">
+            телефоны отсутствуют
+        </div>
+    </div>
+    <div class="actions">
+
+        <!-- Кнопка редактирования (если есть) -->
+        <a th:href="@{/clients/{id}/edit(id=${client.clientId})}">
+            Редактировать
+        </a>
+
+        <!-- Кнопка удаления -->
+        <form th:action="@{/clients/{id}/delete(id=${client.clientId})}" method="post" style="display:inline">
+
+            <button type="submit"
+                    onclick="return confirm('Удалить клиента?');">
+                Удалить
+            </button>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
