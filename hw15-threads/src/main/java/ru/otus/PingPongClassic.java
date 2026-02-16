@@ -10,7 +10,7 @@ public class PingPongClassic {
     private boolean ascOrder = true;
 
     public void print(boolean isThread1) {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             synchronized (lock) {
                 try {
                     // ждём своей очереди
@@ -52,7 +52,7 @@ public class PingPongClassic {
 
     public static void main(String[] args) {
 
-        PingPongReent pp = new PingPongReent();
+        PingPongClassic pp = new PingPongClassic();
 
         Thread t1 = new Thread(() -> pp.print(true), "Thread-1");
         Thread t2 = new Thread(() -> pp.print(false), "Thread-2");

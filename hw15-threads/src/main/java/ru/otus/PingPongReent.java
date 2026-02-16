@@ -14,7 +14,7 @@ public class PingPongReent {
     private boolean ascOrder = true;
 
     public void print(boolean isThread1) {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             lock.lock();
             try {
                 while (isThread1 != isThread1Turn) {
