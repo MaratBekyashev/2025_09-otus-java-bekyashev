@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "ru.otus.numbers";
+option java_multiple_files = true;
+
+// Сервис для генерации последовательности чисел
+service NumbersService {
+    // Клиент делает запрос и получает поток чисел
+    rpc generateNumbers(NumberRequest) returns (stream NumberResponse);
+}
+
+// Запрос с диапазоном
+message NumberRequest {
+    int32 firstValue = 1;
+    int32 lastValue = 2;
+}
+
+// Ответ сервера — одно число
+message NumberResponse {
+    int32 value = 1;
+}
