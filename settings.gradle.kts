@@ -17,6 +17,9 @@ include("hw14-spring-data-jdbc")
 include("hw15-threads")
 include("hw16-queues")
 
+include("hw17-gRpc")
+
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
