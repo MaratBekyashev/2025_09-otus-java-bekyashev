@@ -1,0 +1,5 @@
+ru\otus\controller\UsersControllerTest.class
+ru\otus\controller\ProjectControllerTest.class
+ru\otus\security\TestSecurityConfig.class
+ru\otus\controller\CommentControllerTest.class
+ru\otus\controller\TaskControllerTest.class
