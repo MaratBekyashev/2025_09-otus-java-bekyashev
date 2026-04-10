@@ -3,11 +3,27 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/diploma_db
     username: otus
     password: otus
     driver-class-name: org.postgresql.Driver
+
+  kafka:
+    bootstrap-servers: localhost:29092 # Для локальной разработки
+    #bootstrap-servers: localhost:9092 # Для работы в докере
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: audit-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
+      properties:
+        spring.json.trusted.packages: ru.otus.kafka
+
   cache:
     cache-names: usersCache
   sql:

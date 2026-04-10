@@ -35,6 +35,12 @@ public class AuditLog {
     @Column(name = "entity_id")
     private Long entityId;
 
+    @Column(name = "call_result")
+    private String callResult;
+
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "create_date")
     LocalDateTime createDate;
 
