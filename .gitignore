@@ -36,3 +36,5 @@ out
 *.iws
 *.ipr
 *.idea
+**/logs/app.log.*
+**/target/
